@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 
 import { HardhatUserConfig, task } from 'hardhat/config';
-import '@nomiclabs/hardhat-etherscan';
+// import '@nomiclabs/hardhat-etherscan';
 import "@nomicfoundation/hardhat-verify";
 import '@nomiclabs/hardhat-waffle';
 import '@typechain/hardhat';
@@ -15,6 +15,8 @@ const API_URL_MCH = process.env.API_URL_MCH;
 const API_URL_ZKKATANA = process.env.API_URL_ZKKATANA;
 const API_URL_MUMBAI = process.env.API_URL_MUMBAI;
 const API_KEY = process.env.API_KEY;
+const API_URL_ASTAR = process.env.API_URL_ASTAR;
+const API_KEY_ASTAR = process.env.API_KEY_ASTAR ? process.env.API_KEY_ASTAR : '';
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
@@ -57,13 +59,33 @@ const config: HardhatUserConfig = {
       chainId: 80001,
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
     },
+    astar: {
+      url: API_URL_ASTAR,
+      chainId: 592,
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+    }
   },
   gasReporter: {
     enabled: true,
     currency: 'USD',
   },
   etherscan: {
-    apiKey: API_KEY,
+    apiKey: {
+      astar : API_KEY_ASTAR
+    },
+    customChains: [
+      {
+        network: "astar",
+        chainId: 592,
+        urls: {
+          apiURL: "https://blockscout.com/astar/api",
+          browserURL: "https://blockscout.com/astar"
+        }
+      }
+    ],
+  },
+  sourcify: {
+    enabled: true
   }
 };
 

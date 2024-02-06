@@ -1,0 +1,22 @@
+{
+    "name": "web3/metaverce Comunity Share News Campaign 202402 #2",
+    "image": "https://dtu-dao-aws-core-function-dtudaonftmetadatabucket4-fxn0v8mx0mur.s3.ap-northeast-1.amazonaws.com/astarEVM/0x3D56fC5e2c29d690a587222b9151F2695EA37a16/image/2/2.png",
+    "attributes": [
+        {
+            "trait_type": "BU",
+            "value": "XSM"
+        },
+        {
+            "trait_type": "DATE",
+            "value": "2024/2"
+        },
+        {
+            "trait_type": "TYPE",
+            "value": "Piece"
+        },
+        {
+            "trait_type": "No.",
+            "value": "2"
+        }
+    ]
+}

@@ -24,15 +24,15 @@ contract puzzeleNft is ERC721, AccessControl, IERC5192 {
     mapping(uint256 => uint256) piece; // eventId=>pieces for clear
     mapping(uint256 => uint256) counter; // eventId=>counts of mint
     mapping(uint256 => address[]) achievers; // envetId=>achievers
-    mapping(uint256 => string) evntName; 
+    mapping(uint256 => string) eventName; 
 
     //*********************************************
     //Initilizer
     //*********************************************
-    constructor(string memory uriPrefix_) ERC721('DtuPuzzleNft', 'DPZL') {
-        setMetadataPrefix(uriPrefix_);
+    constructor() ERC721("DtuPuzzleNft", "DPZL") {
         _grantRole(MINTER_ROLE, msg.sender);
         _grantRole(DEVELOPER_ROLE, msg.sender);
+        // setMetadataPrefix(uriPrefix_);
     }
     modifier checkLock() {
         if (isLocked) revert ErrLocked();
@@ -49,12 +49,16 @@ contract puzzeleNft is ERC721, AccessControl, IERC5192 {
 
         _output = string(abi.encodePacked(
             baseMedataURIPrefix,
-            toString(_eventId),
+            Strings.toString(_eventId),
             '/',
-            toString(_counter),
+            Strings.toString(_counter),
             '.json'
         ));
         return _output;
+    }
+
+    function getMetadataPrefix() public view onlyRole(DEVELOPER_ROLE) returns (string memory){
+        return baseMedataURIPrefix;
     }
 
     //*********************************************
@@ -79,7 +83,7 @@ contract puzzeleNft is ERC721, AccessControl, IERC5192 {
         
         piece[_eventId] = piece_;
         counter[_eventId] = 0;
-        achievers[_eventId] = [];
+        // achievers[_eventId] = [];
         eventName[_eventId] = eventName_;
     }
     
@@ -90,7 +94,7 @@ contract puzzeleNft is ERC721, AccessControl, IERC5192 {
         uint256 eventId_,
         address to_
     ) public onlyRole(MINTER_ROLE){
-        require(counter[eventId_] > 0, 'puzzleNft.sol | This event-id is not registered');
+        require(piece[eventId_] > 0, 'puzzleNft.sol | This event-id is not registered');
         uint256 _counter = counter[eventId_] + 1;
         uint256 _tokenId = eventId_ * EVENT_PREFIX + _counter;  
         _mint(to_, _tokenId);
@@ -146,7 +150,7 @@ contract puzzeleNft is ERC721, AccessControl, IERC5192 {
         public
         view
         virtual
-        override
+        override (ERC721, AccessControl)
         returns (bool)
     {
         return interfaceId == type(IERC5192).interfaceId
